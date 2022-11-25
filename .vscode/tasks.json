@@ -1,0 +1,50 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+            "label": "cmake",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-G",
+                "Unix Makefiles",
+                "-DCMAKE_BUILD_TYPE=Debug",
+            ]
+        },
+		{
+            "label": "make",
+            "dependsOn": [
+                "cmake",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "type": "shell",
+            "command": "make",
+            "args": []
+        },
+        // ================ use on win===========
+        {
+            "label": "cmakewin",
+            "type": "shell",
+            "command": "cd ./build | cmake .. -G 'MinGW Makefiles'",
+        },
+        {
+            "label": "makewin",
+            "dependsOn": [
+                "cmakewin",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "type": "shell",
+            "command": "cd ./build | make",
+            "args": [
+              
+            ]
+        }
+		
+	]
+}

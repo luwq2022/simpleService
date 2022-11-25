@@ -1,0 +1,9 @@
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+SimpleService
+.DS_Store
+.vscode/settings.json
+bin
+build

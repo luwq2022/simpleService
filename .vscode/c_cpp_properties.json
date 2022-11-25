@@ -1,0 +1,41 @@
+{
+    "env": {
+        "myIncludePath":[
+            "${workspaceFolder}/**",
+            "${workspaceFolder}/deps/asio/include"
+        ]
+    },
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${myIncludePath}"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.19041.0",
+            "compilerPath": "C:\\mingw64\\bin\\g++.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        },
+        {
+            "name": "Mac",
+            "includePath": [
+                "${myIncludePath}"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-x64"
+        }
+    ],
+    "version": 4
+}
