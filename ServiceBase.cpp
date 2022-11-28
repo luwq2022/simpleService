@@ -1,18 +1,14 @@
 #include "ServiceBase.h"
 #include <iostream>
 #include <thread>
+#include "HYLog.h"
 
 const int ServiceTickInterval = 50;
-
-int LogInfo(std::string info)
-{
-    std::cout << info.c_str() << std::endl;
-	return 0;
-}
 
 CServiceBase::CServiceBase()
 	: m_bRunning(false)
 {
+	LOGINIT("./ServiceBase.log");
 }
 
 CServiceBase::~CServiceBase()
@@ -21,7 +17,7 @@ CServiceBase::~CServiceBase()
 
 bool CServiceBase::Run()
 {
-	LogInfo("ServiceBase Run");
+	LogInfo("ServiceBase Run %s", "...");
 	while (m_bRunning)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(ServiceTickInterval));

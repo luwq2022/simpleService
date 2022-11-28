@@ -15,6 +15,7 @@ LinkUser.cpp
 TCPSession.cpp
 NetService.cpp
 deps/common/HYBuffer.cpp
+deps/common/Logger.cpp
 )
 
 include_directories("deps/asio/include")
