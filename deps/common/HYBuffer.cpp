@@ -122,9 +122,8 @@ bool CHYBuffer::AppendFormatTextV(const char* pszFmt, va_list arglist)
 {
 	char pData[BUFFER_SIZE] = { 0 };
 	
-	snprintf(pData, BUFFER_SIZE, pszFmt, arglist);
+	vsprintf(pData, pszFmt, arglist);
 	int nLen = GetStrLen(pData);
-
 	
 	bool ret = Append(pData, nLen);
 	if (ret == true)
@@ -143,12 +142,12 @@ bool CHYBuffer::AppendFormatString(const char* pszFmt, ...)
 	return ret;
 }
 
+#include <iostream>
 bool CHYBuffer::AppendFormatStringV(const char* pszFmt, va_list arglist)
 {
 	char pData[BUFFER_SIZE] = { 0 };
-	snprintf(pData, BUFFER_SIZE, pszFmt, arglist);
+	vsprintf(pData, pszFmt, arglist);
 	int nLen = GetStrLen(pData);
-	
 	return Append(pData, nLen);
 }
 

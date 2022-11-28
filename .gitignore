@@ -7,3 +7,4 @@ SimpleService
 .vscode/settings.json
 bin
 build
+*.log
