@@ -1,4 +1,5 @@
 #include "LinkUser.h"
+#include "HYLog.h"
 
 CLinkUser::CLinkUser()
 	: m_funcSendMsg(nullptr)
@@ -15,6 +16,7 @@ bool CLinkUser::SendMsg(char* msg, int nLen)
 	{
 		return m_funcSendMsg(msg, nLen);
 	}
+	LogError("CLinkUser::SendMsg failed! can not find send func");
 	return false;
 }
 

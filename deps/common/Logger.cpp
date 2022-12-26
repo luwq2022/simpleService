@@ -3,17 +3,11 @@
 #include <thread>
 #include <chrono>
 #include "HYBuffer.h"
+#include "HYFunc.h"
 
 static CLoggerMgr s_logMgr;
 
-time_t GetTimeStamp()
-{
-    // 获取操作系统当前时间点（精确到微秒）
-    std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> tpMicro
-          = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
-    // (微秒精度的)时间点 => (微秒精度的)时间戳
-    return tpMicro.time_since_epoch().count();
-}
+
 
 CLoggerMgr::CLoggerMgr()
 {
@@ -147,16 +141,9 @@ bool CLogger::WriteLog(std::string strPre, const char *szLogFormat, ...)
 #else
     localtime_r(&t, &tm);
 #endif
-    //gmtime_s(&tm, &t);
+
 	struct tm* ptm = &tm;
-
-	std::stringstream strID;
-	int nId = 0;
-    strID << std::this_thread::get_id();// ._To_text(strID);
-	strID >> nId;
-
 	char timeStr[128] = { 0 };
-    //sprintf_s(timeStr, "%02d/%02d/%02d %02d:%02d:%02d %08X ", 
     snprintf(timeStr,128, "%02d/%02d/%02d %02d:%02d:%02d %08X ", 
 		(int)ptm->tm_mon + 1,
 		(int)ptm->tm_mday,
@@ -164,7 +151,7 @@ bool CLogger::WriteLog(std::string strPre, const char *szLogFormat, ...)
 		(int)ptm->tm_hour,
 		(int)ptm->tm_min,
 		(int)ptm->tm_sec,
-		nId
+		std::this_thread::get_id()
         );
 
     CHYBuffer bufLog;

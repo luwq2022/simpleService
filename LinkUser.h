@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include "stdint.h"
 
 typedef std::function<bool(char* msg, int nLen)> SendMsgFunc ;
 
@@ -18,7 +19,10 @@ public:
 
 	bool BindSendMsgFunc(SendMsgFunc func);
 
+	void SetSessionID(int64_t id){m_sesID = id;};
+
 protected:
 	SendMsgFunc m_funcSendMsg;
+	int64_t m_sesID;
 };
 

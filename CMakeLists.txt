@@ -16,6 +16,10 @@ TCPSession.cpp
 NetService.cpp
 deps/common/HYBuffer.cpp
 deps/common/Logger.cpp
+deps/common/HYTimer.cpp
+deps/common/HYEvent.cpp
+deps/common/ThreadPool.cpp
+deps/common/HYFunc.cpp
 )
 
 include_directories("deps/asio/include")
@@ -23,7 +27,8 @@ include_directories("deps/common")
 
 #add_compile_definitions(_GLIBCXX_HAS_GTHREADS)
 
-add_executable(SimpleService ${SRC_LIST})
+#add_executable(SimpleService ${SRC_LIST})
+add_library(ServiceBase STATIC ${SRC_LIST})
 
 
 if (WIN32)
@@ -32,7 +37,7 @@ set(link_LIBRARIES
 WSock32
 WS2_32
 )
-target_link_libraries(SimpleService ${link_LIBRARIES})
+#target_link_libraries(SimpleService ${link_LIBRARIES})
 
 endif()
 

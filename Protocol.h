@@ -10,4 +10,6 @@ typedef struct tagHEADER
     DWORD	dwLength;			//消息体长度
 }HYHEADER,*PHYHEADER;
 
-const int HYHEADERSIZE = 8;
+const int HYHEADERSIZE = sizeof(HYHEADER);
+
+#define HY_ACK  0x8000

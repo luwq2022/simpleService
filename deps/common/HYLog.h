@@ -24,22 +24,22 @@ public:
 };
 
 enum LogLevel{
-    FATAL = 1,
-    ERROR,
-    WARN,
-    INFO,
-    DEBUG,
-    TRACE,
+    LL_FATAL = 1,
+    LL_ERROR,
+    LL_WARN,
+    LL_INFO,
+    LL_DEBUG,
+    LL_TRACE,
 };
 
-const int nLogLevel = TRACE;
+const int nLogLevel = LL_TRACE;
 
 #define LOGINIT(fileName)  Log::GetInstance()->Init(fileName);
 #define HYLOG(szLogFormat, ...) {Log::GetInstance()->logger.WriteLog("", szLogFormat,##__VA_ARGS__);Log::GetInstance()->logger.Flush();}
 //
-#define LogTrace(szLogFormat, ...) if(nLogLevel >= LogLevel::TRACE){Log::GetInstance()->logger.WriteLog("[Trace]", szLogFormat,##__VA_ARGS__);}
-#define LogDebug(szLogFormat, ...) if(nLogLevel >= LogLevel::DEBUG){Log::GetInstance()->logger.WriteLog("[Debug]", szLogFormat,##__VA_ARGS__);}
-#define LogInfo(szLogFormat, ...) if(nLogLevel >= LogLevel::INFO){Log::GetInstance()->logger.WriteLog("[Info]", szLogFormat,##__VA_ARGS__);}
-#define LogWarn(szLogFormat, ...) if(nLogLevel >= LogLevel::WARN){Log::GetInstance()->logger.WriteLog("[Warn]", szLogFormat,##__VA_ARGS__);}
-#define LogError(szLogFormat, ...) if(nLogLevel >= LogLevel::ERROR){Log::GetInstance()->logger.WriteLog("[Error]", szLogFormat,##__VA_ARGS__);}
-#define LogFatal(szLogFormat, ...) if(nLogLevel >= LogLevel::FATAL){Log::GetInstance()->logger.WriteLog("[Fatal]", szLogFormat,##__VA_ARGS__);}
+#define LogTrace(szLogFormat, ...) if(nLogLevel >= LogLevel::LL_TRACE){Log::GetInstance()->logger.WriteLog("[Trace]", szLogFormat,##__VA_ARGS__);}
+#define LogDebug(szLogFormat, ...) if(nLogLevel >= LogLevel::LL_DEBUG){Log::GetInstance()->logger.WriteLog("[Debug]", szLogFormat,##__VA_ARGS__);}
+#define LogInfo(szLogFormat, ...) if(nLogLevel >= LogLevel::LL_INFO){Log::GetInstance()->logger.WriteLog("[Info]", szLogFormat,##__VA_ARGS__);}
+#define LogWarn(szLogFormat, ...) if(nLogLevel >= LogLevel::LL_WARN){Log::GetInstance()->logger.WriteLog("[Warn]", szLogFormat,##__VA_ARGS__);}
+#define LogError(szLogFormat, ...) if(nLogLevel >= LogLevel::LL_ERROR){Log::GetInstance()->logger.WriteLog("[Error]", szLogFormat,##__VA_ARGS__);}
+#define LogFatal(szLogFormat, ...) if(nLogLevel >= LogLevel::LL_FATAL){Log::GetInstance()->logger.WriteLog("[Fatal]", szLogFormat,##__VA_ARGS__);}

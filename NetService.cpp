@@ -2,6 +2,9 @@
 #include <thread>
 #include <utility>
 #include "AsioServer.h"
+#include "HYTimer.h"
+#include "HYEvent.h"
+#include "HYLog.h"
 
 CNetService::CNetService()
 	: m_nPort(20001)

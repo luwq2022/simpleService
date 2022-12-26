@@ -1,8 +1,19 @@
 #include "TCPSession.h"
 #include "LinkUser.h"
 #include "Protocol.h"
+#include "HYLog.h"
+#include <atomic>
 
 const int MAX_MSG_DATA_LEN = 64 * 1024;
+std::atomic<int64_t> s_sessionID = 0;
+
+CTCPSession::CTCPSession(asio::ip::tcp::socket& sock)
+		: m_socket(std::move(sock))
+		, m_pUser(nullptr)
+		, m_CreateUserFunc(nullptr)
+{
+	m_sesID = (++s_sessionID);
+}
 
 void CTCPSession::Start()
 {
@@ -11,7 +22,13 @@ void CTCPSession::Start()
 
 void CTCPSession::CloseSession()
 {
-	// TODO
+	m_socket.close();
+	if (m_pUser)
+	{
+		m_pUser->OnBreak();
+		delete m_pUser;
+		m_pUser = nullptr;
+	}
 }
 
 bool CTCPSession::CreateUser()
@@ -32,6 +49,10 @@ bool CTCPSession::CreateUser()
 		if (pUser)
 		{
 			BindUser(pUser);
+			pUser->BindSendMsgFunc([&](char* msg, int nLen)->bool{
+				Send(msg, nLen);
+			});
+			pUser->SetSessionID(m_sesID);
 		}
 	}
 
@@ -42,9 +63,23 @@ bool CTCPSession::HandleMsg(std::error_code ec, std::size_t length)
 {
 	if (!ec)
 	{
-		if(m_pUser == nullptr) CreateUser();
+		//LogTrace("Session %lld Recv msg data %d", m_sesID, length);
+		if(m_pUser == nullptr)
+		{
+			if (length < HYHEADERSIZE)
+			{
+				LogWarn("Session %lld Recv msg data %d, too short", m_sesID, length);
+				return false;
+			}
+			
+			CreateUser();
+		}
 
-		if (m_pUser == nullptr) return false;
+		if (m_pUser == nullptr) 
+		{
+			LogWarn("Session %lld Recv msg data %d, create user failed", m_sesID, length);
+			return false;
+		}
 		
 		int nOffset = 0;
 		while (nOffset < length)
@@ -89,6 +124,7 @@ bool CTCPSession::HandleMsg(std::error_code ec, std::size_t length)
 			if (dwLength > MAX_MSG_DATA_LEN) // 消息太长，认为非法，或者已经处理错误
 			{
 				CloseSession();
+				LogWarn("Session %lld Recv msg data %d, msg len %d, drop", m_sesID, length, dwLength);
 				return false;
 			}
 			
@@ -110,12 +146,13 @@ bool CTCPSession::HandleMsg(std::error_code ec, std::size_t length)
 	}
 	else
 	{
-		if (!m_socket.is_open())
+		if (ec.value() == 10054) //远端断开连接
 		{
-			if (m_pUser)
-			{
-				m_pUser->OnBreak();
-			}
+			CloseSession();
+		}
+		else
+		{
+			LogWarn("Session recv msg err %d.", ec.value());
 		}
 	}
 	return true;
@@ -127,29 +164,31 @@ void CTCPSession::Read()
 		[&](std::error_code ec, std::size_t length)
 	{
 		HandleMsg(ec, length);
-		Read();
+		if(m_socket.is_open())
+		{
+			Read();
+		}
 	});
 }
 
 bool CTCPSession::Send(char* msg, int nLength)
 {
-	/*
+	//LogTrace("Session %lld Send %d", m_sesID, nLength);
 	asio::async_write(m_socket, asio::buffer(msg, nLength),
-		[&](std::error_code ec, std::size_t )
+		[&](std::error_code ec, std::size_t sz)
 	{
 		if (ec)
 		{
-			if (!m_socket.is_open())
-			{
-				if (m_pUser)
-				{
-					m_pUser->OnBreak();
-				}
-			}
+			LogWarn("Session %lld send msg result %d, isopen:%d", m_sesID, ec.value(), m_socket.is_open());
+			CloseSession();
+			return false;
+		}
+		else
+		{
+			//LogTrace("Session %lld Send size:%d", m_sesID, sz);
 		}
 		
 	});
-	*/
 
 	return true;
 }

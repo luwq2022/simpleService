@@ -9,11 +9,8 @@ typedef std::function<CLinkUser*(int nOrigin)> CreateFunc ;
 class CTCPSession
 {
 public:
-	CTCPSession(asio::ip::tcp::socket& sock)
-		: m_socket(std::move(sock))
-		, m_pUser(nullptr)
-		, m_CreateUserFunc(nullptr)
-	{}
+	CTCPSession(asio::ip::tcp::socket& sock);
+	
 public:
 	asio::ip::tcp::socket& Socket() { return m_socket; }
 
@@ -42,5 +39,6 @@ private:
 	CLinkUser* m_pUser;
 	CreateFunc m_CreateUserFunc;
 	CHYBuffer m_buf;
+	int64_t m_sesID = 0;
 };
 

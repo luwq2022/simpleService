@@ -4,12 +4,7 @@
 		{
             "label": "cmake",
             "type": "shell",
-            "command": "cmake",
-            "args": [
-                "-G",
-                "Unix Makefiles",
-                "-DCMAKE_BUILD_TYPE=Debug",
-            ]
+            "command": "cmake -G 'Unix Makefiles'",
         },
 		{
             "label": "make",

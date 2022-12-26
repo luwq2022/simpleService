@@ -8,3 +8,5 @@ SimpleService
 bin
 build
 *.log
+deps/gtest
+deps/lib
