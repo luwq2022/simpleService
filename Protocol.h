@@ -1,6 +1,6 @@
 #pragma once
 
-using DWORD = unsigned long;
+using DWORD = unsigned int;
 using WORD = unsigned short;
 
 typedef struct tagHEADER
